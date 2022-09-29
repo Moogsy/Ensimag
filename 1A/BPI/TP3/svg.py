@@ -12,12 +12,18 @@ from collections import namedtuple
 VERSION = "1.1"
 NAMESPACE = "http://www.w3.org/2000/svg"
 
-# Definition de la structure Point composée de deux attributs x et y
+AngleRadians = float
+Dimensions = namedtuple("Dimensions", "longueur largeur")
+
 Point = namedtuple("Point", "x y")
+Segment = namedtuple("Segment", "p1 p2")
+Triangle = namedtuple("Triangle", "p1 p2 p3")
+Carre = namedtuple("Carre", "p1 p2 p3 p4")
+Polygone = list[Point]
 
 
 # À implémenter dans 'TP2. Module SVG'
-def genere_balise_debut_image(largeur, hauteur):
+def genere_balise_debut_image(longueur: int, largeur: int):
     """
     Retourne la chaîne de caractères correspondant à la balise ouvrante pour
     décrire une image SVG de dimensions largeur x hauteur pixels. Les paramètres
@@ -26,7 +32,7 @@ def genere_balise_debut_image(largeur, hauteur):
     Remarque : l'origine est en haut à gauche et l'axe des Y est orienté vers le
     bas.
     """
-    return f"<svg xmlns='{NAMESPACE}' version='{VERSION}' width='{largeur}' height='{hauteur}'>"
+    return f"<svg xmlns='{NAMESPACE}' version='{VERSION}' width='{longueur}' height='{largeur}'>"
 
 
 # À implémenter dans 'TP2. Module SVG'
@@ -93,38 +99,85 @@ def genere_segment(dep: Point, arr: Point) -> str:
     return f"""<line x1="{dep.x}" y1="{dep.y}" x2="{arr.x}" y2="{arr.y}" style="stroke: black;"/>"""
 
 
-def test():
+def genere_balise_debut_groupe_transp(niveau_opacite: float):
     """
-    Genere une image permettant de verifier que le module fonctionne
+    Retourne la chaîne de caractères correspondant à une balise ouvrant un
+    groupe d'éléments qui, dans son ensemble, sera partiellement transparent.
+    Les éléments qui composent le groupe se masquent les uns les autres dans
+    l'ordre d'apparition (ils ne sont pas transparents entre eux).
+    `niveau_opacite` doit être un nombre entre 0 et 1. Ce groupe doit être
+    refermé de la même manière que les groupes définissant un style.
     """
-    cercles: list[tuple[int, int]] = [
-        (100, 20),
-        (260, 20),
-        (20, 120),
-        (180, 120),
-        (340, 120),
-        (100, 220),
-        (260, 220),
-        (180, 320),
+    return f"<g opacity='{niveau_opacite}'>"
+
+
+def _fmt_polygone(points: Polygone) -> str:
+    """
+    Renvoie la chaine de caractères formattants les points
+    pour former un polygone
+    """
+    return " ".join([f"{x}, {y}" for x, y in points])
+
+
+def genere_polygone(points: Polygone) -> str:
+    """
+    Retourne la chaîne de caractères correspondant à un élément SVG
+    représentant un polygone. `points` est un tableaux de points.
+    """
+    fmt = _fmt_polygone(points)
+    return f"<polygon points='{fmt}' />"
+
+
+def genere_couleur_fond(largeur_image: int, longueur_image: int, couleur: str) -> str:
+    """
+    Génère un rectangle permettant de changer la couleur de fond de l'image
+    """
+    points = [
+        Point(0, 0),
+        Point(0, longueur_image),
+        Point(largeur_image, longueur_image),
+        Point(largeur_image, 0),
+    ]
+    fmt = _fmt_polygone(points)
+
+    return f"<polygon points='{fmt}' fill='{couleur}' />"
+
+
+def genere_bordure_polygone(polygone: Polygone) -> list[str]:
+    """
+    Renvoie une liste de lignes permettant de tracer les bordures
+    d'un polygone
+    """
+    sortie = []
+
+    for i in range(len(polygone)):
+        sortie.append(genere_segment(polygone[i - 1], polygone[i]))
+
+    return sortie
+
+
+def genere_bordure_carre(lieu: Point, taille: int) -> list[str]:
+    """
+    Génère un carré dont le point en haut à gauche sera situé
+    aux coordonées "lieu" et dont les côtés auront pour longueur
+    "taille".
+    """
+    points = [
+        lieu,
+        Point(lieu.x, lieu.y + taille),
+        Point(lieu.x + taille, lieu.y + taille),
+        Point(lieu.x + taille, lieu.y),
     ]
 
-    with open("test_image.svg", "w", encoding="utf-8") as svg:
-        svg.write(genere_balise_debut_image(360, 340) + "\n")
+    return genere_bordure_polygone(points)
 
-        svg.write(
-            genere_balise_debut_groupe(
-                couleur_ligne="black", couleur_remplissage="pink", epaisseur_ligne=2
-            )
-            + "\n"
-        )
-
-        for centre_x, centre_y in cercles:
-            svg.write(genere_cercle(centre=Point(centre_x, centre_y), rayon=10) + "\n")
-
-        svg.write(genere_balise_fin_groupe() + "\n")
-
-        svg.write(genere_balise_fin_image())
+def genere_texte(texte: str, lieu: Point, *, couleur: str) -> str:
+    """
+    genere du texte au lieu choisi et ayant la couleur choisie.
+    """
+    return f"<text x='{lieu.x}' y='{lieu.y}' fill='{couleur}' > {texte} </text>"
 
 
-if __name__ == "__main__":
-    test()
+
+
+
