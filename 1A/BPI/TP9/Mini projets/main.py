@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import sys
-from typing import Generator, Literal
+from typing import Iterable, Literal
 
 
 def signe(n: int) -> Literal[-1, 1] | None:
@@ -16,8 +16,8 @@ def signe(n: int) -> Literal[-1, 1] | None:
 
 
 def sous_suites_monotones(
-    source: Generator[int, None, None]
-) -> Generator[list[int], None, None]:
+    source: Iterable[int],
+) -> Iterable[list[int]]:
     """
     Crée un génératuer fournissant toutes les sous suite
     monotones à partir de la suite du générateur source
@@ -25,46 +25,46 @@ def sous_suites_monotones(
     Dans le cas où 0 ou 1 nombre est fourni, la séquence
     fournie sera directement renvoyée
     """
-    tmp = []
+    sous_suite = []
     try:
-        tmp.append(next(source))
-        tmp.append(next(source))
+        sous_suite.append(next(source))
+        sous_suite.append(next(source))
     except StopIteration:
-        yield tmp
+        yield sous_suite
         return
 
-    monotonie_actuelle = signe(tmp[1] - tmp[0])
+    monotonie = signe(sous_suite[1] - sous_suite[0])
 
     for num in source:
-        nouvelle_monotonie = signe(num - tmp[-1])
+        nouvelle_monotonie = signe(num - sous_suite[-1])
 
-        if nouvelle_monotonie == monotonie_actuelle or nouvelle_monotonie is None:
-            tmp.append(num)
+        if nouvelle_monotonie == monotonie or nouvelle_monotonie is None:
+            sous_suite.append(num)
         else:
-            yield tmp
+            yield sous_suite
 
-            tmp = [tmp[-1], num]
-            monotonie_actuelle = nouvelle_monotonie
+            sous_suite = [sous_suite[-1], num]
+            monotonie = nouvelle_monotonie
 
-    yield tmp
+    yield sous_suite
 
 
-def plus_grande_sous_suite_monotone(source: Generator[int, None, None]) -> list[int]:
+def plus_grande_sous_suite_monotone(source: Iterable[int]) -> list[int]:
     """
     Renvoie la plus grande sous suite monotone du générateur source
     """
     return max(sous_suites_monotones(source), key=len, default=[])
 
 
-def lis_nombres(fname: str) -> Generator[int, None, None]:
+def lis_nombres(fname: str, **kwargs) -> Iterable[int]:
     """
-    Extrait les nomres du fichier demandé.
+    Renvoie un générateur fournissant les nombres contenus dans
+    fichier dont le nom a été passé en argument
     """
-    with open(fname, "r", encoding="utf-8") as file:
+    with open(fname, "r", **kwargs) as file:
         for line in file:
             for num in line.split():
                 yield int(num)
-
 
 def main():
     """
@@ -78,7 +78,8 @@ def main():
     """
     _, fname, *_ = sys.argv
 
-    suite = plus_grande_sous_suite_monotone(lis_nombres(fname))
+    source_nombres = lis_nombres(fname, encoding="utf-8")
+    suite = plus_grande_sous_suite_monotone(source_nombres)
     print(*suite, sep=" ")
 
 
