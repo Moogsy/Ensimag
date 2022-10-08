@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import sys
+from itertools import takewhile
 from typing import Iterable, Literal
 
 
@@ -14,6 +15,22 @@ def signe(n: int) -> Literal[-1, 1] | None:
     except ZeroDivisionError:
         return None
 
+
+def derniers_elements_egaux(sous_suite: list[int]) -> int:
+    """
+    Renvoie les derniers elements égaux de la 
+    liste fournie qui doit déjà être triée.
+    """
+    dernier = sous_suite[-1]
+    elements_egaux = [dernier]
+
+    for x in reversed(sous_suite[:-1]):
+        if x == dernier:
+            elements_egaux.append(x)
+        else:
+            return elements_egaux
+
+    return elements_egaux
 
 def sous_suites_monotones(
     source: Iterable[int],
@@ -43,7 +60,7 @@ def sous_suites_monotones(
         else:
             yield sous_suite
 
-            sous_suite = [sous_suite[-1], num]
+            sous_suite = derniers_elements_egaux(sous_suite) + [num]
             monotonie = nouvelle_monotonie
 
     yield sous_suite
@@ -66,10 +83,11 @@ def lis_nombres(fname: str, **kwargs) -> Iterable[int]:
             for num in line.split():
                 yield int(num)
 
+
 def main():
     """
-    Extrait la suite de nombre du fichier passé en argument de ligne de commande
-    et affiche sa plus longue sous séquence monotone.
+    Extrait la suite de nombre du fichier passé en argument de ligne de
+    commande et affiche sa plus longue sous séquence monotone.
 
     En notant n le nombre de chiffre passé en argument:
 
@@ -79,8 +97,10 @@ def main():
     _, fname, *_ = sys.argv
 
     source_nombres = lis_nombres(fname, encoding="utf-8")
-    suite = plus_grande_sous_suite_monotone(source_nombres)
-    print(*suite, sep=" ")
+    # suite = plus_grande_sous_suite_monotone(source_nombres)
+    # print(*suite, sep=" ")
+
+    print(*plus_grande_sous_suite_monotone(source_nombres), sep=" ")
 
 
 if __name__ == "__main__":

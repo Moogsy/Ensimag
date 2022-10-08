@@ -34,6 +34,29 @@ def genere_carre(depuis: svg.Point, taille: int) -> list[str]:
     return lignes
 
 
+def genere_carre_montant(
+    *,
+    offsets: tuple[int, int],
+    longueur_carre: int,
+    num_decalage: int,
+    num_carre: int,
+    point_actuel: svg.Point
+) -> list[str]:
+
+    sortie = []
+
+    offset_x, offset_y = offsets
+
+    offset_y -= longueur_carre
+    point_actuel = svg.Point(offset_x, offset_y)
+    sortie.extend(genere_carre(svg.Point(offset_x, offset_y), longueur_carre))
+
+    if num_decalage == 0:
+        sortie.append(svg.genere_texte(num_carre, point_actuel, couleur="red"))
+
+    return sortie
+
+
 def genere_plateau(
     dimensions: svg.Dimensions,
     longueur_carre: int,
@@ -61,15 +84,16 @@ def genere_plateau(
         if offset_y - 2 * longueur_carre < 0:
             return sortie
 
-        for i in range(2):
-
-            offset_y -= longueur_carre
-
-            point_actuel = svg.Point(offset_x, offset_y)
-
-            sortie.extend(genere_carre(svg.Point(offset_x, offset_y), longueur_carre))
-            if i == 0:
-                sortie.append(svg.genere_texte(num_carre, point_actuel, couleur="red"))
+        for num_decalage in range(2):
+            offsets = (offset_x, offset_y)
+            carre_montant = genere_carre_montant(
+                offsets=offsets,
+                longueur_carre=longueur_carre,
+                num_decalage=num_decalage,
+                num_carre=num_carre,
+                point_actuel=point_actuel,
+            )
+            sortie.extend(carre_montant)
 
         op *= -1
         num_carre += 1

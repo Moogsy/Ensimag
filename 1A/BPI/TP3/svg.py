@@ -171,6 +171,7 @@ def genere_bordure_carre(lieu: Point, taille: int) -> list[str]:
 
     return genere_bordure_polygone(points)
 
+
 def genere_texte(texte: str, lieu: Point, *, couleur: str) -> str:
     """
     genere du texte au lieu choisi et ayant la couleur choisie.
@@ -178,6 +179,10 @@ def genere_texte(texte: str, lieu: Point, *, couleur: str) -> str:
     return f"<text x='{lieu.x}' y='{lieu.y}' fill='{couleur}' > {texte} </text>"
 
 
-
-
+def genere_rectangle(top_left: Point, width: int, height: int) -> str:
+    """
+    Retourne la chaîne de caractères corresponadant à un élément SVG représentant un rectangle.
+    """
+    x, y = top_left
+    return f"<rect x='{x}' y='{y}' width='{width}' height='{height}'/>"
 
