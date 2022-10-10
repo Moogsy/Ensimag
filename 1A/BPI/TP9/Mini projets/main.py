@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import sys
-from itertools import takewhile
 from typing import Iterable, Literal
 
 
