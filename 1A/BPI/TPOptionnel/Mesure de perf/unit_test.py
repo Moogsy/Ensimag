@@ -1,7 +1,7 @@
 import unittest
 import random
 
-from main import insert_sort, select_sort
+from main import insert_sort, merge_sort, select_sort
 
 
 class TestTris(unittest.TestCase):
@@ -46,33 +46,33 @@ class TestTris(unittest.TestCase):
 
             self.assertEqual(ref, to_sort)
 
-    def test_tri_selection_deja_trie(self):
+    def test_tri_fusion_deja_trie(self):
         li = [*range(10)]
-        select_sort(li)
+        li = merge_sort(li)
         self.assertEqual(li, [*range(10)])
 
-    def test_tri_selection_trie_decroissant(self):
+    def test_tri_fusion_trie_decroissant(self):
         li = [*range(10)]
         li.reverse()
-        select_sort(li)
+        li = merge_sort(li)
         self.assertEqual(li, [*range(10)])
 
-    def test_tri_selection_elements_distincts(self):
+    def test_tri_fusion_elements_distincts(self):
         li = [3, 5, 4, 2, 1]
-        select_sort(li)
+        li = merge_sort(li)
         self.assertEqual(li, [1, 2, 3, 4, 5])
 
-    def test_tri_selection_quelconque(self):
+    def test_tri_fusion_quelconque(self):
         li = [2, 5, 6, 2, 7, 9, 20, 34]
 
         li2 = li.copy()
         li2.sort()
 
-        select_sort(li)
+        li = merge_sort(li)
 
         self.assertEqual(li, li2)
 
-    def test_tri_selection_listes_aleatoires(self):
+    def test_tri_fusion_listes_aleatoires(self):
         """Test non biaisé
         Détection éventuelle de cas limites non testés précédemment
         """
@@ -83,7 +83,7 @@ class TestTris(unittest.TestCase):
             ref = to_sort.copy()
             ref.sort()
 
-            select_sort(to_sort)
+            to_sort = merge_sort(to_sort)
 
             self.assertEqual(ref, to_sort)
 
