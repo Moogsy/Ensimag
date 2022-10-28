@@ -47,12 +47,12 @@ def deplace_a_gauche_de(tableau: list[int], *, depuis: int, vers: int):
         depuis -= 1
 
 
-def pivote_en_place(tableau: int, *, indice_pivot: int):
+def pivote_en_place(tableau: list[int], *, indice_pivot: int):
     """
     Partitionne le tableau en deux parties séparées par tableau[indice_pivot]
     la partie gauche contenant les éléments inférieurs au pivot, l'autre
     contenant les éléments strictement supérieurs
-    
+
     Les complexités en espace et en temps dans le pire des cas sont linéaires.
     """
     echange(tableau, indice_pivot, 0)

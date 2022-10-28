@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import sys
-from typing import Iterable, Literal
+from typing import Generator, Literal
 
 
 def signe(n: int) -> Literal[-1, 1] | None:
@@ -10,14 +10,14 @@ def signe(n: int) -> Literal[-1, 1] | None:
     renvoie None s'il est nul.
     """
     try:
-        return n // abs(n)
+        return n // abs(n)  # type: ignore
     except ZeroDivisionError:
         return None
 
 
-def derniers_elements_egaux(sous_suite: list[int]) -> int:
+def derniers_elements_egaux(sous_suite: list[int]) -> list[int]:
     """
-    Renvoie les derniers elements égaux de la 
+    Renvoie les derniers elements égaux de la
     liste fournie qui doit déjà être triée.
     """
     dernier = sous_suite[-1]
@@ -31,9 +31,10 @@ def derniers_elements_egaux(sous_suite: list[int]) -> int:
 
     return elements_egaux
 
+
 def sous_suites_monotones(
-    source: Iterable[int],
-) -> Iterable[list[int]]:
+    source: Generator[int, None, None],
+) -> Generator[list[int], None, None]:
     """
     Crée un génératuer fournissant toutes les sous suite
     monotones à partir de la suite du générateur source
@@ -65,14 +66,14 @@ def sous_suites_monotones(
     yield sous_suite
 
 
-def plus_grande_sous_suite_monotone(source: Iterable[int]) -> list[int]:
+def plus_grande_sous_suite_monotone(source: Generator[int, None, None]) -> list[int]:
     """
     Renvoie la plus grande sous suite monotone du générateur source
     """
     return max(sous_suites_monotones(source), key=len, default=[])
 
 
-def lis_nombres(fname: str, **kwargs) -> Iterable[int]:
+def lis_nombres(fname: str, **kwargs) -> Generator[int, None, None]:
     """
     Renvoie un générateur fournissant les nombres contenus dans
     fichier dont le nom a été passé en argument
