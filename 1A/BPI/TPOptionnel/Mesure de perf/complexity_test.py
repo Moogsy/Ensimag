@@ -6,7 +6,7 @@ import time
 
 from matplotlib import pyplot as plt
 
-from main import insert_sort, select_sort
+from main import insert_sort, merge_sort, select_sort
 
 
 def generate_random_list(length: int) -> list[int]:
@@ -28,11 +28,12 @@ def get_time(sorter: Callable[[list], None], li: list) -> float:
 
 
 def main():
-    fig, ax = plt.subplots()
+    ax: plt.Axes
+    _, ax = plt.subplots() # type: ignore
     num_test = 500
 
     x_axis = list(range(num_test))
-    sorters = [insert_sort, select_sort]
+    sorters = [insert_sort, merge_sort, select_sort]
     times = defaultdict(list)
 
     for k in x_axis:
