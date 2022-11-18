@@ -1,0 +1,22 @@
+Bravo,
+
+Enfin, en esperant que vous n'ayez pas examine tous les fichiers un
+par un, mais que vous ayez utilise une commande comme
+
+  find . -name '*.txt' ...
+
+L'etape suivante se trouve aussi dans
+/matieres/3MMUNIX//jeu-de-piste/kmcvoaue/etape-E6/.
+
+C'est le plus gros fichier qui se trouve dans ce repertoire ou un de
+ses sous-repertoires.
+
+Les commandes find et sort peuvent vous aider. Regardez en
+particulier l'option -exec de find ou bien documentez-vous sur la
+commande xargs.
+
+Cette etape est tres difficile, n'hesitez pas a demander de l'aide a
+votre enseignant ou a vos collegues. Certains exercices de la fin du
+chapitre 7 du guide ont été fait pour vous guider sur cette étape,
+si vous ne les avez pas encore fait, il est temps d'avancer sur la
+lecture du guide.

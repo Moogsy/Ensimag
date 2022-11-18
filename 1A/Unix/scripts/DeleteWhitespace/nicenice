@@ -1,0 +1,4 @@
+#! /usr/bin/zsh
+
+touch "hello world"
+touch "hello"

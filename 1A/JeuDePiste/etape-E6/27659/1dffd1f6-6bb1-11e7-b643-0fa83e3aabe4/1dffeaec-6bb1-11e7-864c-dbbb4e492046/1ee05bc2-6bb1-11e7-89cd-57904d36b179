@@ -1,0 +1,28 @@
+Bravo, vous avez trouve l'etape E8.
+
+Si vous avez utilisé une commande comme
+
+  find . -type f | xargs grep Bravo
+
+sachez qu'il y a plus simple : l'option -r de grep a ete faite
+exactement pour cela :
+
+  grep -r Bravo .
+
+(le . a la fin veut dire "dans le repertoire courant")
+
+Une subtilité, si on veut chercher correctement la chaine complete :
+on ne peut pas écrire simplement
+
+  grep -r Bravo, vous avez trouve l'etape E8 .
+
+qui tenterait d'appeler grep avec les arguments 'Bravo,', 'vous' ...
+On peut dire a notre shell de considerer la chaine comme un seul
+argument en ajoutant des guillemets :
+
+  grep -r "Bravo, vous avez trouve l'etape E8" .
+
+Pour l'étape suivante, elle se trouve à l'adresse
+
+http://lig-enseignement.imag.fr/jeu-de-piste/yntsf/etape-E9.php
+
