@@ -13,8 +13,8 @@ import math
 #  - le nom de la fonction à tester sinon
 
 test_integer_Q2    = "tp.integer_Q2"
-test_pointfloat_Q2 = "" # à remplacer par "tp.pointfloat_Q2"
-test_integer       = "" # à remplacer par "tp.integer"
+test_pointfloat_Q2 = "tp.pointfloat_Q2" # à remplacer par "tp.pointfloat_Q2"
+test_integer       = "tp.integer" # à remplacer par "tp.integer"
 test_pointfloat    = "" # à remplacer par "tp.pointfloat"
 test_exponent      = "" # à remplacer par "tp.exponent"
 test_exponentfloat = "" # à remplacer par "tp.exponentfloat"
